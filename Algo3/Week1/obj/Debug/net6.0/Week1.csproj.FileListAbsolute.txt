@@ -1,0 +1,15 @@
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.csproj.AssemblyReference.cache
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.GeneratedMSBuildEditorConfig.editorconfig
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.AssemblyInfoInputs.cache
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.AssemblyInfo.cs
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.csproj.CoreCompileInputs.cache
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\bin\Debug\net6.0\Week1.exe
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\bin\Debug\net6.0\Week1.deps.json
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\bin\Debug\net6.0\Week1.runtimeconfig.json
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\bin\Debug\net6.0\Week1.dll
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\bin\Debug\net6.0\Week1.pdb
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.dll
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\refint\Week1.dll
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.pdb
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\Week1.genruntimeconfig.cache
+D:\HocTap\LapTrinh\Coursera\StanfordCourse\Algo3\Week1\obj\Debug\net6.0\ref\Week1.dll
