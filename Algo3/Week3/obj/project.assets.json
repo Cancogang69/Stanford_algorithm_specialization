@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\HocTap\\LapTrinh\\Coursera\\StanfordCourse\\Algo3\\Week3\\Week3.csproj",
+      "projectUniqueName": "D:\\HocTap\\LapTrinh\\Coursera\\Stanford_algorithm_Coursera_course\\Algo3\\Week3\\Week3.csproj",
       "projectName": "Week3",
-      "projectPath": "D:\\HocTap\\LapTrinh\\Coursera\\StanfordCourse\\Algo3\\Week3\\Week3.csproj",
+      "projectPath": "D:\\HocTap\\LapTrinh\\Coursera\\Stanford_algorithm_Coursera_course\\Algo3\\Week3\\Week3.csproj",
       "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-      "outputPath": "D:\\HocTap\\LapTrinh\\Coursera\\StanfordCourse\\Algo3\\Week3\\obj\\",
+      "outputPath": "D:\\HocTap\\LapTrinh\\Coursera\\Stanford_algorithm_Coursera_course\\Algo3\\Week3\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config"
