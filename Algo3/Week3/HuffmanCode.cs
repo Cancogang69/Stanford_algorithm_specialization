@@ -46,47 +46,6 @@ public class tree {
         Link(ref result, right, true);
         return result;
     }
-}
-
-public static class DataPreprocess {
-    public static void ReadData(ref List<long> list, string fileName) {
-        using(StreamReader data = File.OpenText(fileName)) {
-            string? number = data.ReadLine();
-            while(number!=null) {
-                list.Add(long.Parse(number));
-                number = data.ReadLine();
-            }
-        }
-    }
-
-    public static void swap<type>(ref List<type> list, int one, int two) {
-        type temp = list[one];
-        list[one]= list[two];
-        list[two]= temp;
-    }
-
-    private static int partition(ref List<long> list, int low, int high, bool isDesc) {
-        var pivot = list[high];
-
-        //i is index of the neighbor element of pivot
-        int i = low-1;
-        for(int j=low; j<high; j++)
-            if (list[j]>pivot==isDesc) {
-                i++;
-                swap(ref list, i, j);
-            }
-
-        swap(ref list, i+1, high);
-        return i+1;  
-    }
-
-    public static void Sort(ref List<long> list, int low, int high, bool isDesc) {
-        if(low<high) {
-            var pivot = partition(ref list, low, high, isDesc);
-            Sort(ref list, low, pivot-1, isDesc);
-            Sort(ref list, pivot+1, high, isDesc);
-        }
-    }
 } 
 
 public static class HuffmanMethod {
@@ -130,8 +89,10 @@ public static class HuffmanMethod {
         return sprout;
     }
 
-    public static tree encode(List<long> originlist) {
-        List<long> list = new List<long>(originlist);
+    public static tree encode(List<int> originlist) {
+        List<long> list = new List<long>();
+        for(int i=0; i<originlist.Count(); i++)
+            list.Add((long) originlist[i]);
         Queue<long> queue = new Queue<long>();
         List<tree> forest = new List<tree>();
         List<long> forestIndex = new List<long>();
@@ -176,7 +137,7 @@ public static class HuffmanMethod {
         return forest[forest.Count()-1];
     }
 
-    private static int NodeLength(tree bigTree, long value) {
+    private static int NodeLength(tree bigTree, int value) {
         if(value == bigTree.value)
             return 0;   
         for(int i=0; i<bigTree.leftValue.Count(); i++)
@@ -193,7 +154,7 @@ public static class HuffmanMethod {
         return -1;
     }
     
-    public static void  BinaryLength(List<long> list, ref List<long> length, tree huffTree) {
+    public static void  BinaryLength(List<int> list, ref List<int> length, tree huffTree) {
         for(int i=0; i<list.Count(); i++)
             length.Add(NodeLength(huffTree, list[i]));
     }
