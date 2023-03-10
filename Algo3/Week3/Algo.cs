@@ -1,21 +1,56 @@
-﻿using HuffmanCode;
+﻿using DataProcessing;
+using HuffmanCode;
+using IndependentSet;
 
+//Question 1 and 2
 string dataSet1 = "DataSet1.txt";
-List<long> originList = new List<long>();
-DataPreprocess.ReadData(ref originList, dataSet1);
+List<int> huffList = new List<int>();
+Processing.ReadData(ref huffList, dataSet1);
 
 int low = 0;
-int high = originList.Count()-1;
-DataPreprocess.Sort(ref originList, low, high, true);
+int high = huffList.Count()-1;
+Processing.Sort(ref huffList, low, high, true);
 
-tree huffTree = HuffmanMethod.encode(originList);
+tree huffTree = HuffmanMethod.encode(huffList);
 
-List<long> lengthList = new List<long>();
-HuffmanMethod.BinaryLength(originList, ref lengthList, huffTree);
+List<int> lengthList = new List<int>();
+HuffmanMethod.BinaryLength(huffList, ref lengthList, huffTree);
 
-DataPreprocess.Sort(ref lengthList, low, high, true);
+Processing.Sort(ref lengthList, low, high, true);
 
 Console.WriteLine("maxium length: " + lengthList[0]);
 Console.WriteLine("minium length: " + lengthList[lengthList.Count()-1]);
+
+huffList.Clear();
+lengthList.Clear();
+
+//Question 3
+string dataSet2 = "DataSet2.txt";
+//string dataSet2 = "TestDataSet2.txt";
+List<int> weightList = new List<int>();
+Processing.ReadData(ref weightList, dataSet2);
+
+List<long> maxWISList = new List<long>();
+ISMethod.FindIndepentSet(weightList, ref maxWISList);
+
+List<bool> isInIS = new List<bool>();
+ISMethod.FindVerticeInIS(weightList, maxWISList, ref isInIS);
+
+Console.WriteLine("done");
+
+string questionSet = "Question3Vertices.txt";
+List<int> qVertices = new List<int>();
+Processing.ReadData(ref qVertices, questionSet);
+
+for(int i=0; i<qVertices.Count(); i++)
+    if(isInIS[qVertices[i]-1])
+        Console.Write("1");
+    else 
+        Console.Write("0");
+
+Console.WriteLine();
+
+
+
 
  
