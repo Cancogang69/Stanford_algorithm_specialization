@@ -2,7 +2,6 @@ namespace HuffmanCode;
 
 //if it's a sub-tree node or root node, value means sum of all its children-node's values
 //if it's a leaf node, value means its value
-//the first node in each list is the direct child of sub-tree
 public class tree {
     public long value;
     public tree? lChild;
