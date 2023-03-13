@@ -5,37 +5,19 @@ namespace HuffmanCode;
 //the first node in each list is the direct child of sub-tree
 public class tree {
     public long value;
-    public List<long> leftValue;
-    public List<long> rightValue;
-    public List<tree> leftNodes;
-    public List<tree> rightNodes;
+    public tree? lChild;
+    public tree? rChild;
     public tree(long _value) {
         value = _value;
-        leftNodes = new List<tree>();
-        rightNodes = new List<tree>();
-        leftValue = new List<long>();
-        rightValue = new List<long>();
+        lChild = null;
+        rChild = null;
     }
 
     private static void Link(ref tree parent, tree child, bool rightChild) {
-        if(rightChild) {
-            parent.rightNodes.Add(child);
-            parent.rightNodes.AddRange(child.leftNodes);
-            parent.rightNodes.AddRange(child.rightNodes);
-
-            parent.rightValue.Add(child.value);
-            parent.rightValue.AddRange(child.leftValue);
-            parent.rightValue.AddRange(child.rightValue);
-        }
-        else {
-            parent.leftNodes.Add(child);
-            parent.leftNodes.AddRange(child.leftNodes);
-            parent.leftNodes.AddRange(child.rightNodes);
-
-            parent.leftValue.Add(child.value);
-            parent.leftValue.AddRange(child.leftValue);
-            parent.leftValue.AddRange(child.rightValue);
-        }
+        if(rightChild)
+            parent.rChild = child;
+        else 
+            parent.lChild = child;
     }
 
     public static tree Merge(tree left, tree right) {
@@ -46,11 +28,18 @@ public class tree {
         Link(ref result, right, true);
         return result;
     }
+
+    public static bool isLeaf(tree _tree) {
+        if(_tree.lChild==null)
+            return true;
+        
+        return false;
+    }
 } 
 
 public static class HuffmanMethod {
 
-    private static int WhichToMerge(ref List<long> list, ref Queue<long> queue) {
+    private static int WhichToMerge(List<long> list, Queue<long> queue) {
         if(queue.Count()==0)
            return 1;
         if(list.Count()==1)
@@ -72,10 +61,7 @@ public static class HuffmanMethod {
             if(forestIndex[i]==value)
                 return forest[i];
         
-        tree sprout = new tree(value);
-        forest.Add(sprout);
-        forestIndex.Add(value);
-        return sprout;
+        return new tree(value);
     }
 
     private static tree rePlant(ref List<tree> forest, ref List<long> forestIndex, long lValue, long rValue) {
@@ -101,7 +87,7 @@ public static class HuffmanMethod {
         while(count!=1) {
             int lSize = list.Count();
             int lastIndex = lSize-1;
-            int flag = WhichToMerge(ref list, ref queue);
+            int flag = WhichToMerge(list, queue);
 
             if(flag==1) {
                 tree sprout = rePlant(ref forest, ref forestIndex, list[lastIndex], list[lastIndex-1]);
@@ -118,7 +104,7 @@ public static class HuffmanMethod {
             else if(flag==2) {
                 tree sprout = rePlant(ref forest, ref forestIndex, list[lastIndex], queue.Dequeue());
                 
-                if(lSize>=2 && sprout.value <= list[1])
+                if(lSize>=2 && sprout.value <= list[lastIndex-1])
                     list[lastIndex]=sprout.value;
                 else {
                     queue.Enqueue(sprout.value);
@@ -136,26 +122,18 @@ public static class HuffmanMethod {
 
         return forest[forest.Count()-1];
     }
-
-    private static int NodeLength(tree bigTree, int value) {
-        if(value == bigTree.value)
-            return 0;   
-        for(int i=0; i<bigTree.leftValue.Count(); i++)
-            if(bigTree.leftValue[i]==value) {
-                return 1 + NodeLength(bigTree.leftNodes[0], value);
-            }
-        
-        for(int i=0; i<bigTree.rightValue.Count(); i++) 
-            if(bigTree.rightValue[i]==value) {
-                return 1 + NodeLength(bigTree.rightNodes[0], value);
-            }
-        
-        //this for error detection
-        return -1;
-    }
     
-    public static void  BinaryLength(List<int> list, ref List<int> length, tree huffTree) {
-        for(int i=0; i<list.Count(); i++)
-            length.Add(NodeLength(huffTree, list[i]));
+    public static void BinaryLength(ref List<int> lengthList, tree huffTree, int lenght) {
+        if(tree.isLeaf(huffTree.lChild))
+            lengthList.Add(lenght);
+        else
+            BinaryLength(ref lengthList, huffTree.lChild, lenght+1);
+
+        if(tree.isLeaf(huffTree.rChild))
+            lengthList.Add(lenght);
+        else
+            BinaryLength(ref lengthList, huffTree.rChild, lenght+1);
+        
+        return;
     }
 }

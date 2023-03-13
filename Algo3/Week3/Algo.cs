@@ -14,7 +14,8 @@ Processing.Sort(ref huffList, low, high, true);
 tree huffTree = HuffmanMethod.encode(huffList);
 
 List<int> lengthList = new List<int>();
-HuffmanMethod.BinaryLength(huffList, ref lengthList, huffTree);
+int length = 1;
+HuffmanMethod.BinaryLength(ref lengthList, huffTree, length);
 
 Processing.Sort(ref lengthList, low, high, true);
 
