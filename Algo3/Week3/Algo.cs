@@ -37,8 +37,6 @@ ISMethod.FindIndepentSet(weightList, ref maxWISList);
 List<bool> isInIS = new List<bool>();
 ISMethod.FindVerticeInIS(weightList, maxWISList, ref isInIS);
 
-Console.WriteLine("done");
-
 string questionSet = "Question3Vertices.txt";
 List<int> qVertices = new List<int>();
 Processing.ReadData(ref qVertices, questionSet);
