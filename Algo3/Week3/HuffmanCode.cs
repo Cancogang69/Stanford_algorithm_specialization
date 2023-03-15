@@ -12,19 +12,11 @@ public class tree {
         rChild = null;
     }
 
-    private static void Link(ref tree parent, tree child, bool rightChild) {
-        if(rightChild)
-            parent.rChild = child;
-        else 
-            parent.lChild = child;
-    }
-
     public static tree Merge(tree left, tree right) {
         var sum = left.value + right.value;
         tree result = new tree(sum);
-
-        Link(ref result, left, false);
-        Link(ref result, right, true);
+        result.lChild = left;
+        result.rChild = right;
         return result;
     }
 
@@ -91,14 +83,13 @@ public static class HuffmanMethod {
             if(flag==1) {
                 tree sprout = rePlant(ref forest, ref forestIndex, list[lastIndex], list[lastIndex-1]);
 
-                if(lSize>=3 && sprout.value <= list[lastIndex-2]) {
-                    list[lastIndex-1]=sprout.value;
-                    list.RemoveAt(lastIndex);
-                }
-                else {
-                    queue.Enqueue(sprout.value);
-                    list.RemoveRange(lastIndex-1, 2);
-                }
+                list.RemoveRange(lastIndex-1, 2);
+                lastIndex-=2;
+                long newValue = sprout.value;
+                if(lastIndex>-1 && newValue<=list[lastIndex])
+                    list.Add(newValue);
+                else 
+                    queue.Enqueue(newValue);
             }
             else if(flag==2) {
                 tree sprout = rePlant(ref forest, ref forestIndex, list[lastIndex], queue.Dequeue());

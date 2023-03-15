@@ -11,6 +11,10 @@ int low = 0;
 int high = huffList.Count()-1;
 Processing.Sort(ref huffList, low, high, true);
 
+long sum = 0;
+for(int i=0; i<huffList.Count(); i++)
+    sum+=huffList[i];
+
 tree huffTree = HuffmanMethod.encode(huffList);
 
 List<int> lengthList = new List<int>();
@@ -41,6 +45,7 @@ string questionSet = "Question3Vertices.txt";
 List<int> qVertices = new List<int>();
 Processing.ReadData(ref qVertices, questionSet);
 
+Console.Write("Answer for question 3: ");
 for(int i=0; i<qVertices.Count(); i++)
     if(isInIS[qVertices[i]-1])
         Console.Write("1");
