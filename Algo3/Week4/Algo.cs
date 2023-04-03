@@ -2,21 +2,19 @@
 using DataProcessing;
 
 //string dataSet1 = "DataSet1.txt";
-string dataSet1 = "test.txt";
-int knapCapacity = 0;
-List<knap> knapList = null;
+string dataSet1 = "test2.txt";
+int knapCapacity1 = 0;
+List<knap> knapList1 = new List<knap>();
 
-Processing.ReadData(ref knapList, ref knapCapacity, dataSet1);
+bool flag = Processing.ReadData(ref knapList1, ref knapCapacity1, dataSet1);
+//Processing.WriteData(knapList);
+if(flag)
+    KnapProbSolve.FindOptimalSolution(knapList1, knapCapacity1);
 
-Processing.KnapWeigthSort(ref knapList);
+string dataSet2 = "DataSet2.txt";
+int knapCapacity2 = 0;
+List<knap> knapList2 = new List<knap>();
+flag = Processing.ReadData(ref knapList2, ref knapCapacity2, dataSet2);
 
-Processing.Combing(ref knapList);
-
-List<knap> solutionList = new List<knap>(knapList.Count());
-solutionList.Add(new knap(0, 0));
-solutionList.Add(knapList[1]);
-int lastIndex = knapList.Count()-1;
-KnapProbSolve.OptimalSolution(knapList, ref solutionList, knapCapacity, lastIndex);
-Console.WriteLine(solutionList[lastIndex].value);
-Console.WriteLine(solutionList[lastIndex].weight); 
-
+if(flag)
+    KnapProbSolve.FindOptimalSolution(knapList2, knapCapacity2);
