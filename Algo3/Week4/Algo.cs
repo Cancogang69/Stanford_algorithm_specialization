@@ -1,16 +1,16 @@
 ﻿using Knapsack;
 using DataProcessing;
 
-//string dataSet1 = "DataSet1.txt";
-string dataSet1 = "test2.txt";
+//Question 1
+string dataSet1 = "DataSet1.txt";
 int knapCapacity1 = 0;
 List<knap> knapList1 = new List<knap>();
 
 bool flag = Processing.ReadData(ref knapList1, ref knapCapacity1, dataSet1);
-//Processing.WriteData(knapList);
 if(flag)
     KnapProbSolve.FindOptimalSolution(knapList1, knapCapacity1);
 
+//Question 2
 string dataSet2 = "DataSet2.txt";
 int knapCapacity2 = 0;
 List<knap> knapList2 = new List<knap>();
