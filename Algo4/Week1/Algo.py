@@ -1,4 +1,5 @@
 import math
+infinite = math.inf
 
 def readGraph(edgeList, inputFile):
     graph = open(inputFile, "r")
@@ -42,7 +43,8 @@ def insertHeap(heap, value):
     while True:
         child = int(len(heap)-1)
         parent = int((child-1)/2)
-        if(heap[child][3]<heap[parent][3]):
+        if(heap[child][3]<heap[parent][3] or 
+           (heap[child][3]==heap[parent][3] and heap[child][2]<heap[parent][2])):
             swap(heap, child, parent)
         else:
             break
@@ -61,9 +63,11 @@ def deleteLastHeap(heap):
         if(rChild>=len(heap)):
             rChild=-1
         min = parent
-        if(heap[lChild][3]<heap[parent][3] ):
+        if(heap[lChild][3]<heap[parent][3] or 
+           (heap[lChild][3]==heap[parent][3] and heap[lChild][2]<heap[parent][3])):
             min = lChild
-        elif(rChild != -1 and heap[rChild][3]<heap[parent][3]):
+        elif(rChild != -1 and (heap[rChild][3]<heap[parent][3] or
+                               (heap[rChild][3]==heap[parent][3] and heap[rChild][2]<heap[parent][3]))):
             min = rChild
         else:
             break
@@ -78,31 +82,36 @@ def Dijkstra(vertexList, sourceVertex, nV):
     heap = []
     for item in vertexList[sourceVertex-1]:
         insertHeap(heap, item)
+    if(len(heap)==0):
+        return infinite
     nV-=1
     flagList[sourceVertex-1] = True
     pathList[sourceVertex-1] = ([sourceVertex, 0, 0])
+
     #minPath is the minimum path
     #first value is the lenth of the minimum path
     #second value is the reweight-length
-    minPath = [math.inf, -1]
+    minPath = infinite
     while(nV>0):
         edge = heap[0]
         while flagList[edge[1]-1]!=False:
             deleteLastHeap(heap)
+            if(len(heap) == 0):
+                return minPath
             edge = heap[0]
+
         headE = edge[0]
         tailE = edge[1]
-        flagList[edge[1]-1] = True
+        flagList[tailE-1] = True
         pathLength = pathList[headE-1][1] + edge[2]
-        reweightPathLength = pathList[headE-1][2] + edge[2]
+        reweightPathLength = pathList[headE-1][2] + edge[3]
         pathList[tailE-1] = [headE, pathLength, reweightPathLength]
         nV-=1
-        if(minPath[1]>pathLength):
-            minPath[0] = pathLength
-            minPath[1] = reweightPathLength
+        if(minPath>pathLength):
+            minPath= pathLength
         for item in vertexList[tailE-1]:
             insertHeap(heap, item)
-    return minPath[0]
+    return minPath
 
 def findShortestShortestPath(edgeList, nV):
     vertexList = [[] for x in range(nV)]
@@ -134,7 +143,7 @@ def Algo(inputFile):
     print(shortestPath)
 
 #Driver code
-inputList = ("g1.txt", "g2.txt", "g3.txt")
+inputList = ("test.txt", )
 for inputFile in inputList:
     Algo(inputFile)
 
