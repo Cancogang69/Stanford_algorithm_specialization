@@ -1,9 +1,9 @@
 def readGraph(inputFile):
     graph = open(inputFile, "r")
     nV = int(graph.readline())
-    coordinateList = ()
+    coordinateList = []
     for i in range(nV):
-        coordinate = list(map(int, graph.readline().split()))
+        coordinate = list(map(float, graph.readline().split()))
         coordinateList.append(coordinate)
     graph.close()
     return nV, coordinateList
@@ -11,3 +11,4 @@ def readGraph(inputFile):
 input = "data_file.txt"
 nV, coordinateList = readGraph(input)
 print(coordinateList)
+print(nV)
