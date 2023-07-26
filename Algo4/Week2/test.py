@@ -8,5 +8,16 @@ def DecToBin(num):
         num = int(num / 2)
     return bin
 
-bin = DecToBin(6)
-print(bin)
+def BinToDec(bin):
+    num = 0
+    expTwo = 1
+    for i in range (len(bin)-1, -1, -1):
+        if bin[i] == "1":
+            num += expTwo
+        expTwo *= 2
+    return num
+
+
+print(DecToBin(19))
+print(BinToDec("10011"))
+
