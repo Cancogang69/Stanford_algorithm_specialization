@@ -44,30 +44,31 @@ def distance(v1, v2):
             (coord1[1]-coord2[1])**2)**(1/2)
 
 def func(table, S, sub, des):
-    sub[des]="0"
-    newS = BinToDec(sub)
+    newSub = sub.copy()
+    newSub[des]="0"
+    newS = BinToDec(newSub)
     min = INF
+    # because the order of bits is from right to left
     vDes = nV - des - 1
     for x in table[newS]:   
-        if x[1] == des:
+        if x[1] == vDes:
             continue
         newDis = x[0] + distance(x[1], vDes)
         if newDis<min:
             min = newDis
-    return (min, des)
+    return (min, vDes)
             
 
 #Driver code
 INF = float("inf")
+files = ["data_file.txt", "data_test.txt"]
+input = files[0]
 
-input = "data_file.txt"
 nV, coordList = readGraph(input)
-
-
 
 # table[S] : a list of dict {distance, end_vertex}
 
-table = [[] for _ in range (1, 2**(nV-1))]
+table = [[] for _ in range (0, 2**(nV))]
 table[1].append((0,0))
 
 # size mean size of subset
@@ -75,21 +76,21 @@ table[1].append((0,0))
 # then S is tranfered into integer number
 # S start from 3 because the subset size start from 2
 
-for size in range (2, nV):
-    for S in range (3, 2**(nV-1), 2):
+for size in range (2, nV+1):
+    for S in range (3, 2**(nV), 2):
         sub = DecToBin(S, nV)
         if SubSize(sub) != size:
             continue
         for i in range(0, len(sub)-1):
             if sub[i] == "0":
                 continue
-            # because the order of bits is from right to left
             table[S].append(func(table, S, sub, i))
 
-finalS = len(table)-1
-finalSet = DecToBin(finalS, nV)
+finalSet = ["1" for _ in range(nV)]
 min = INF
-for x in table[finalS]:
+for x in table[len(table)-1]:
     newDis = x[0] + distance(x[1], 0)
     if newDis<min:
         min = newDis
+
+print(min)

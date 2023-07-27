@@ -22,5 +22,5 @@ size = 25
 bin = DecToBin(num, size)
 print(bin)
 print(len(bin))
-print(BinToDec(bin))
+print(BinToDec("1111"))
 
