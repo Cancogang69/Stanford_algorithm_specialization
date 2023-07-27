@@ -1,10 +1,10 @@
-def DecToBin(num):
-    bin = ""
+def DecToBin(num, binSize):
+    bin = ["0" for _ in range(binSize)]
+    pointer = len(bin) - 1
     while num != 0:
-        if num % 2 == 0:
-            bin = "0" + bin
-        else: 
-            bin = "1" + bin
+        if num % 2 != 0:
+            bin[pointer] = "1"
+        pointer -= 1
         num = int(num / 2)
     return bin
 
@@ -17,7 +17,10 @@ def BinToDec(bin):
         expTwo *= 2
     return num
 
-
-print(DecToBin(19))
-print(BinToDec("10011"))
+num = 16800000
+size = 25
+bin = DecToBin(num, size)
+print(bin)
+print(len(bin))
+print(BinToDec(bin))
 

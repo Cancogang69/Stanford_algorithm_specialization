@@ -8,13 +8,16 @@ def readGraph(inputFile):
     graph.close()
     return nV, coordList
 
-def DecToBin(num):
-    bin = []
+# binSize: the number of bits in the binary string
+# ex: DecToBin(3, 8) will return "00000011"
+
+def DecToBin(num, binSize):
+    bin = ["0" for _ in range(binSize)]
+    pointer = len(bin) - 1
     while num != 0:
-        if num % 2 == 0:
-            bin.append('0')
-        else: 
-            bin.append('1')
+        if num % 2 != 0:
+            bin[pointer] = "1"
+        pointer -= 1
         num = int(num / 2)
     return bin
 
@@ -44,10 +47,11 @@ def func(table, S, sub, des):
     sub[des]="0"
     newS = BinToDec(sub)
     min = INF
+    vDes = nV - des - 1
     for x in table[newS]:   
         if x[1] == des:
             continue
-        newDis = x[0] + distance(x[1], des)
+        newDis = x[0] + distance(x[1], vDes)
         if newDis<min:
             min = newDis
     return (min, des)
@@ -64,7 +68,7 @@ nV, coordList = readGraph(input)
 # table[S] : a list of dict {distance, end_vertex}
 
 table = [[] for _ in range (1, 2**(nV-1))]
-table[1].append((0,1))
+table[1].append((0,0))
 
 # size mean size of subset
 # S is subset which is displayed with a integer number
@@ -72,12 +76,20 @@ table[1].append((0,1))
 # S start from 3 because the subset size start from 2
 
 for size in range (2, nV):
-    for S in range (3, pow(2, nV-1), 2):
-        sub = DecToBin(S)
+    for S in range (3, 2**(nV-1), 2):
+        sub = DecToBin(S, nV)
         if SubSize(sub) != size:
             continue
         for i in range(0, len(sub)-1):
             if sub[i] == "0":
                 continue
+            # because the order of bits is from right to left
             table[S].append(func(table, S, sub, i))
 
+finalS = len(table)-1
+finalSet = DecToBin(finalS, nV)
+min = INF
+for x in table[finalS]:
+    newDis = x[0] + distance(x[1], 0)
+    if newDis<min:
+        min = newDis
