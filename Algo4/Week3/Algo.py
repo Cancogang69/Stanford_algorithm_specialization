@@ -24,12 +24,15 @@ def func(nV, coordList):
             dis = distance(coordList[curV][1:3], v[1:3])
             if dis < minDis:
                 minDis = dis
-                curV = v[0] - 1
+                tempV = v[0] - 1
+        curV = tempV
         tourLenght += minDis
+
+    tourLenght += distance(coordList[curV][1:3], coordList[0][1:3])
     return tourLenght
 
 INF = float("inf")
-files = ["data_file.txt"]
+files = ["data_file.txt", "data_test.txt"]
 nV, coordList = ReadGraph(files[0])
 
 print(func(nV, coordList))
