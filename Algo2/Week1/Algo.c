@@ -55,9 +55,9 @@ int main() {
         free(revGraph);
     }
 
-    ReadGraph(graph, revGraph, input);
-    printGraph(graph, 20);
-    printGraph(revGraph, 20);
+    readGraph(graph, revGraph, input);
+    printGraph(graph, 30);
+    printGraph(revGraph, 30);
     
     free(graph);
     free(revGraph);
