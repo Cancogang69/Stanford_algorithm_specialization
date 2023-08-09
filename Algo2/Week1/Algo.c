@@ -2,64 +2,96 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void initMatrix(int (*matrix)[30], const size_t size){
-    for(int i=0; i<size; i++)
-        for(int j=0; j<20; j++)
-            matrix[i][j] = 0;
-}
+#define Size 876000
 
-void addVertex(int (*graph)[30], const int sourceV, const int destinationV) {
-    for(int i=0; i<20; i++)
-        if(graph[sourceV][i]==0) {
-            graph[sourceV][i]=destinationV;
-            break;
+typedef struct vertex {
+    int size;
+    int used;
+    int *list;
+} vertex;
+
+vertex* initGraph(const int initListSize) {
+    vertex *graph = malloc(sizeof *graph * Size);
+    if(graph==NULL) {
+        printf("cannot allocating memory!");
+        exit(1);
+    }
+
+    for(int i=0; i< Size; i++) {
+        graph[i].list = malloc(sizeof(int) * initListSize);
+        if(graph[i].list==NULL) {
+            printf("cannot allocating memory!");
+            exit(1);
         }
+        graph[i].used = 0;
+        graph[i].size = initListSize;
+    }
+    return graph;
 }
 
-void readGraph(int (*graph)[30], int (*revGraph)[30], const char fileName[]) {
+void addVertex(vertex *graph, const int sourceV, const int destinationV) {
+    vertex *v = &graph[sourceV];
+    if(v->used == v->size) {
+        v->size *= 2;
+        int *temp = realloc(v->list, sizeof(int) * v->size);
+        if(temp == NULL) {
+            printf("Cannot reallocating memory!");
+            exit(0);
+        }
+        v->list = temp;
+    }
+
+    v->list[v->used++] = destinationV;
+}
+
+// convert edge list to adjacency list
+void readGraph(vertex *graph, vertex *revGraph, const char fileName[], int *nV) {
     FILE *inputFile = fopen(fileName, "r");
     if(inputFile==NULL) {
         printf("Cannot read the input file!");
         exit(0);
     }
 
+    int largestV = 0;
     while(!feof(inputFile)){
         int sourceV, destinationV;
         fscanf(inputFile, "%d %d", &sourceV, &destinationV);
         if(sourceV==destinationV)
             continue;
-        addVertex(graph, sourceV, destinationV);
-        addVertex(revGraph, destinationV, sourceV);
+        int biggerV = sourceV > destinationV ? sourceV : destinationV;
+        largestV = largestV >= biggerV ? largestV : biggerV;
+        addVertex(graph, sourceV-1, destinationV-1);
+        addVertex(revGraph, destinationV-1, sourceV-1);
     }
 
-    fclose(inputFile);
+    *nV = largestV;
 }
 
-void printGraph(int (*graph)[30], int nRows) {
+void printGraph(vertex *graph, int nRows) {
     for(int i=0; i<nRows; i++) {
-        for(int j=0; j<30; j++)
-            printf("%d ", graph[i][j]);
-        printf("\n");
+        int n = graph[i].used;
+        printf("\nvertex %d, %d : ", i+1, n);
+        for(int j=0; j<n; j++)
+            printf("%d ", graph[i].list[j]);
     }
 }
+
+// void KosarajuAlgo(int (*graph)[desV]) {
+//     int finishTime = 0;
+//     int leaderV = -1;
+//     bool isExplored[876000] = {false};
+//     for(int i=876000; i>0; i++) {
+
+//     }
+
+// }
 
 int main() {
     char input[] = "data_file.txt";
-    const size_t rows = 876000;
-    int (*graph)[30] = malloc(sizeof *graph * rows);
-    int (*revGraph)[30] = malloc(sizeof *revGraph * rows);
-    if(graph == NULL || revGraph == NULL) {
-        printf("Cannot allocating memory!");
-        exit(1);
-        free(graph);
-        free(revGraph);
-    }
-
-    readGraph(graph, revGraph, input);
-    printGraph(graph, 30);
-    printGraph(revGraph, 30);
-    
-    free(graph);
-    free(revGraph);
-    
+    const int initListSize = 10;
+    vertex *graph = initGraph(initListSize);
+    vertex *revGraph = initGraph(initListSize);
+    bool flag[Size] = {false};
+    int nV;
+    readGraph(graph, revGraph, input, &nV);
 }
