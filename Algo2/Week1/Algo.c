@@ -2,25 +2,23 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define Size 876000
-
 typedef struct vertex {
     int size;
     int used;
     int *list;
 } vertex;
 
-vertex* initGraph(const int initListSize) {
-    vertex *graph = malloc(sizeof *graph * Size);
+vertex* initGraph(int graphSize, const int initListSize) {
+    vertex *graph = malloc(sizeof *graph * graphSize);
     if(graph==NULL) {
-        printf("cannot allocating memory!");
+        printf("cannot allocating memory for graph!");
         exit(1);
     }
 
-    for(int i=0; i< Size; i++) {
+    for(int i=0; i< graphSize; i++) {
         graph[i].list = malloc(sizeof(int) * initListSize);
         if(graph[i].list==NULL) {
-            printf("cannot allocating memory!");
+            printf("cannot allocating memory for vertex's list!");
             exit(1);
         }
         graph[i].used = 0;
@@ -35,7 +33,7 @@ void addVertex(vertex *graph, const int sourceV, const int destinationV) {
         v->size *= 2;
         int *temp = realloc(v->list, sizeof(int) * v->size);
         if(temp == NULL) {
-            printf("Cannot reallocating memory!");
+            printf("Cannot reallocating memory for vertex's list!");
             exit(0);
         }
         v->list = temp;
@@ -45,7 +43,7 @@ void addVertex(vertex *graph, const int sourceV, const int destinationV) {
 }
 
 // convert edge list to adjacency list
-void readGraph(vertex *graph, vertex *revGraph, const char fileName[], int *nV) {
+void readGraph(vertex *graph, vertex *revGraph, const char fileName[], size_t *graphSize) {
     FILE *inputFile = fopen(fileName, "r");
     if(inputFile==NULL) {
         printf("Cannot read the input file!");
@@ -64,7 +62,7 @@ void readGraph(vertex *graph, vertex *revGraph, const char fileName[], int *nV) 
         addVertex(revGraph, destinationV-1, sourceV-1);
     }
 
-    *nV = largestV;
+    *graphSize = largestV;
 }
 
 void printGraph(vertex *graph, int nRows) {
@@ -76,22 +74,23 @@ void printGraph(vertex *graph, int nRows) {
     }
 }
 
-// void KosarajuAlgo(int (*graph)[desV]) {
-//     int finishTime = 0;
-//     int leaderV = -1;
-//     bool isExplored[876000] = {false};
-//     for(int i=876000; i>0; i++) {
+void KosarajuAlgo(vertex *graph, size_t graphSize) {
+    int finishTime = 0;
+    int leaderV = -1;
+    bool isExplored[876000] = {false};
+    for(int i=876000; i>0; i++) {
 
-//     }
+    }
 
-// }
+}
 
 int main() {
     char input[] = "data_file.txt";
     const int initListSize = 10;
-    vertex *graph = initGraph(initListSize);
-    vertex *revGraph = initGraph(initListSize);
-    bool flag[Size] = {false};
-    int nV;
-    readGraph(graph, revGraph, input, &nV);
+    size_t graphSize = 876000;
+    vertex *graph = initGraph(graphSize, initListSize);
+    vertex *revGraph = initGraph(graphSize, initListSize);
+    readGraph(graph, revGraph, input, &graphSize);
+
+    bool *flag = malloc(sizeof *flag * graphSize);
 }
