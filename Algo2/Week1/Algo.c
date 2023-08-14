@@ -17,9 +17,9 @@ node* initGraph(int graphSize, const int initListSize);
 node initStack();
 void addVertex(node *graph, const int sourceV, const int destinationV);
 void readGraph(node *graph, node *revGraph, const char fileName[], size_t *graphSize);
-void printGraph(node *graph, int nRows);
-void DFS(node *graph, int v, const int leaderV, int *fTime, 
-        bool *isExplored, int *fArray, int *leaderArray, int *fP);
+void DFS(node *graph, int v, int *fPointer, bool *isExplored, 
+        bool *isCaptured, int *fArray, int *leaderArray);
+void freeGraph(node *graph, size_t graphSize);
 
 int main() {
     char input[] = "data_file.txt";
@@ -29,23 +29,56 @@ int main() {
     node *revGraph = initGraph(graphSize, initListSize);
     readGraph(graph, revGraph, input, &graphSize);
 
-    printGraph(graph, 5);
+    bool *isExplored = init1DArray(sizeof(bool), graphSize);
+    bool *isCaptured = init1DArray(sizeof(bool), graphSize);
+    //first loop in kosaraju
+    for(int i=0; i<graphSize; i++) {
+        isCaptured[i]=false;
+        isExplored[i]=false;
+    }
+    int *fArray = init1DArray(sizeof(int), graphSize);
+    int fPointer = graphSize-1;
+    for(int i=graphSize-1; i>=0; i--) {
+        if(isExplored[i]==false) {
+            DFS(revGraph, i, &fPointer, isExplored, isCaptured, fArray, NULL);
+        }
+    }
 
-    // bool *isExplored = init1DArray(sizeof(bool), graphSize);
-    // for(int i=0; i<graphSize; i++)
-    //     isExplored[i]=false;
-    // int *fArray = init1DArray(sizeof(int), graphSize);
-    // int fTime = -1;
-    // int fPointer = 0;
-    // for(int i=graphSize-1; i>=0; i--) {
-    //     if(isExplored[i]==false) {
-    //         DFS(graph, i, -1, &fTime, isExplored, fArray, NULL, &fPointer);
-    //     }
-    // }
-    // FILE *output = fopen("output.txt", "w");
-    // for(int i=0; i<graphSize; i++) 
-    //     fprintf(output, "%d %d\n", i+1, fArray[i]);
-    // fclose(output);
+    freeGraph(revGraph, graphSize);
+
+    int *leaderArray = init1DArray(sizeof(int), graphSize);
+    for(int i=0; i<graphSize; i++) {
+        isCaptured[i]=false;
+        isExplored[i]=false;
+        leaderArray[i] = 0;
+    }
+    //second loop in kosaraju
+    for(int i=0; i<graphSize; i++) {
+        int node = fArray[i];
+        if(isExplored[node]==false) {
+            DFS(graph, node, &fPointer, isExplored, isCaptured, NULL, leaderArray);
+        }
+    }
+
+    freeGraph(graph, graphSize);
+    free(isCaptured);
+    free(isExplored);
+
+    int top5[5] = {0};
+    for(int i=0; i<graphSize; i++) {
+        int scc = leaderArray[i];
+        for(int j=0; j<5; j++)
+            if(top5[j]<scc) {
+                int temp = top5[j];
+                top5[j] = scc;
+                scc = temp;
+            }
+    }
+
+    free(leaderArray);
+
+    for(int i=0; i<5; i++)
+        printf("%d ", top5[i]);
 }
 
 void push(node *list, int value) {
@@ -63,7 +96,6 @@ void push(node *list, int value) {
 }
 
 bool isEmpty(node stack) {
-    printf("stack is empty!");
     return stack.used==0 ? true : false;
 }
 
@@ -138,32 +170,38 @@ void readGraph(node *graph, node *revGraph, const char fileName[], size_t *graph
     fclose(inputFile);
 }
 
-void printGraph(node *graph, int nRows) {
-    for(int i=0; i<nRows; i++) {
-        int n = graph[i].used;
-        printf("\nvertex %d, %d : ", i+1, n);
-        for(int j=0; j<n; j++)
-            printf("%d ", graph[i].list[j]);
-    }
-}
-
-void DFS(node *graph, int v, const int leaderV, int *fTime, 
-        bool *isExplored, int *fArray, int *leaderArray, int *fP) 
+void DFS(node *graph, int v, int *fPointer, bool *isExplored, 
+        bool *isCaptured, int *fArray, int *leaderArray) 
 {  
     node stack = initStack();
     push(&stack, v);
     while(!isEmpty(stack)) {
         int s = top(stack);
-        pop(&stack);
-        if(!isExplored[s]) {
-            isExplored[s] = true;
-            fArray[(*fP)++] = (*fTime)++;
-            if(leaderV!=-1) 
-                leaderArray[leaderV]++;
+
+        if(isExplored[s]) {
+            pop(&stack);
+            if(isCaptured[s]) {
+                continue;
+            }
+            isCaptured[s] = true;
+            if(fArray!=NULL)
+                fArray[(*fPointer)--] = s;
+            continue;
         }
-        node *vertex = &graph[v];
+
+        isExplored[s] = true;
+        if(leaderArray!=NULL) 
+            leaderArray[v]++;
+        node *vertex = &graph[s];
         for(int i=0; i<vertex->used; i++)
             if(!isExplored[vertex->list[i]])
                 push(&stack, vertex->list[i]);
     }  
+    free(stack.list);
+}
+
+void freeGraph(node *graph, size_t graphSize) {
+    for(int i=0; i<graphSize; i++)
+        free(graph[i].list);
+    free(graph);
 }
