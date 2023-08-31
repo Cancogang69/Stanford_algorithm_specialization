@@ -24,9 +24,16 @@ std::string int2string(int num) {
     return result;
 }
 
+int string2int(std::string num) {
+    int result = 0;
+    for(int i=num.length()-1, p=1; i>=0; i--, p*=10)
+        result += char2int(num[i]) * p;
+    return result;
+}
+
 std::string mul(std::string num1, std::string num2) {
-    int n1 = char2int(num1[0]);
-    int n2 = char2int(num2[0]);
+    int n1 = string2int(num1);
+    int n2 = string2int(num2);
     int product = n1*n2;
     if(product==0)
         return "0";
@@ -87,6 +94,7 @@ std::string subtract(std::string num1, std::string num2) {
             e1 += 10;
             remainder = 1;
         } 
+        else remainder = 0;
         int sub = e1 - e2;
         result[i] = int2char(sub);
     }
@@ -96,28 +104,29 @@ std::string subtract(std::string num1, std::string num2) {
 }
 
 void seperateInto2String(const std::string& num, std::string result[2]) {
-    int mid = num.length()/2;
+    int mid = num.length()/2 + num.length()%2;
     result[0] = num.substr(0, mid);
     result[1] = num.substr(mid);
 }
 
 std::string KaratsubaAlgo(std::string num1, std::string num2) {
-    if(num1.length() == 1 && num2.length()== 1) {
+    int n1 = num1.length(), n2 = num2.length();
+    if(abs(n1-n2)<=1 && (n1==1 || n2==1)) {
         return mul(num1, num2);
     }
     std::string ab[2], cd[2];
-    balancing(num1, num2);
     seperateInto2String(num1, ab);
     seperateInto2String(num2, cd);
+    n1 = ab[0].length();
+    n2 = cd[0].length();
     std::string str1 = KaratsubaAlgo(ab[0], cd[0]);
     std::string str2 = KaratsubaAlgo(ab[1], cd[1]);
     std::string str3 = KaratsubaAlgo(add(ab[0], ab[1]), add(cd[0], cd[1]));
     str3 = subtract(str3, str1);
     str3 = subtract(str3, str2);
-    std::string tenExp (num1.length(), '0');
-    std::string tenExpn (num1.length()/2, '0');
-    str1 += tenExp;
-    str3 += tenExpn;
+    int m = n1 < n2 ? n1 : n2;
+    str1.append(m*2, '0');
+    str3.append(m, '0');
     std::string result = add(str1, str3);
     result = add(result, str2);
     removeHeadZeros(result);
@@ -129,5 +138,5 @@ int main() {
     std::string num2 = "3141592653589793238462643383279502884197169399375105820974944592";
     std::string num3 = "1234";
     std::string num4 = "5678";
-    std::cout<<KaratsubaAlgo(num3, num4)<<"\n";
+    std::cout<<KaratsubaAlgo(num1, num2)<<"\n";
 }
