@@ -8,9 +8,16 @@ void readData(std::string inputFile, int array[10000]) {
         exit(-1);
     }
 
-    for
+    for(int i=0, num; input>>num; i++)
+        array[i] = num;
+    
+    input.close();
 }
 
 int main() {
     std::string inputFile = "data_file.txt";
+    int array[10000];
+    readData(inputFile, array);
+    for(int i=0; i<10; i++)
+        std::cout<<array[i]<<" ";
 }
