@@ -10,7 +10,7 @@ void readData(std::string inputFile, std::vector<int>& array) {
         exit(-1);
     }
 
-    for(int i=0, num; input>>num; i++)
+    for(int num; input>>num; )
         array.push_back(num);
 
     input.close();
