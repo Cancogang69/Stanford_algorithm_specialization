@@ -37,7 +37,5 @@ int main() {
     std::string inputFile = "data_file.txt";
     std::vector<int> graph[graphSize];
     readData(inputFile, graph);
-    std::vector<int> array = {1, 2, 3, 4, 7, 5, 6, 9};
-    std::cout<<"randomly choose a num in array: "<<randomlyChoose(array)<<"\n";
         
 }
