@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef long long llong;
 
@@ -57,10 +58,36 @@ llong * readFile(const char *inputFile, const int nV) {
     return list;
 }
 
+void swap(void *n1, void *n2, size_t tSize) {
+    void *temp = allocate(1, tSize);
+    memmove(temp, n1, tSize);
+    memmove(n1, n2, tSize);
+    memmove(n2, temp, tSize);
+    free(temp);
+}
+
+int partition(llong *list, int left, int right) {
+    llong pivot = list[left];
+    int i=left;
+    swap(&list[i], &list[right], sizeof *list);
+    for(int j=left; j<right; j++)
+        if(list[j]<pivot)
+            swap(&list[i++], &list[j], sizeof *list);
+    swap(&list[i], &list[right], sizeof *list);
+    return i;
+}
+
+void QuickSort(llong *list, int left, int right) {
+    if(left>=right) return;
+
+    int p = partition(list, left, right);
+    QuickSort(list, left, p-1);
+    QuickSort(list, p+1, right);
+}
+
 int main() {
     const char *inputFile = "data_file.txt";
     const int n = 1000000;
     llong *list = readFile(inputFile, n);
-    for(int i=0; i<10; i++)
-        printf("%lld ", list[i]);
+    QuickSort(list, 0, n-1);
 }
