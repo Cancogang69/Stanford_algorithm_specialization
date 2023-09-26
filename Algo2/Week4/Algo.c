@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef long long llong;
 
@@ -90,4 +91,26 @@ int main() {
     const int n = 1000000;
     llong *list = readFile(inputFile, n);
     QuickSort(list, 0, n-1);
+
+    //use 2 pointer to cut down the sum range
+    int left = 0, right = n-1,
+        zeroPos = 10000, count = 0;
+    bool flag[20001] = {false};
+    while(left<=right) {
+        llong sum = list[left] + list[right];
+        if(sum<-(zeroPos))
+            left++;
+        else if(sum>zeroPos)
+            right--;
+        else {
+            while(sum<=zeroPos) {
+                if(!flag[sum+zeroPos]) {
+                    flag[sum+zeroPos] = true;
+                    count++;
+                }
+                sum = list[++left] + list[right];
+            }
+        }
+    }
+    printf("%d", count);
 }
