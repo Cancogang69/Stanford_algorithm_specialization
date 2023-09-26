@@ -105,13 +105,6 @@ void pop(Edge *heap, int *heapSize) {
     }   
 }
 
-int isTarget(int *vertices, int value, int size) {
-    for(int i=0; i<size; i++)
-        if(vertices[i]==value)
-            return i;
-    return -1;
-}
-
 int * dijkstraAlgo(Node *graph, int src, int nV) {
     //this is a min heap
     Edge *heap = allocate(10000, sizeof *heap),
